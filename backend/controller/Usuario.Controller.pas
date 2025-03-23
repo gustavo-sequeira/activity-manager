@@ -30,7 +30,7 @@ begin
 
       vUsuario.LOGIN := vBody.GetValue<string>('login', '');
       vUsuario.SENHA := vBody.GetValue<string>('senha', '');
-      vUsuario.Autenticar(vErro);
+      vUsuario.Logar(vErro);
 
       vBody.Free;
 
@@ -45,7 +45,7 @@ begin
     end;
 
     vJsonObject := TJSONObject.Create;
-    vJsonObject.AddPair('codigo', vUsuario.CODIGO.ToString);
+    vJsonObject.AddPair('codigo',vUsuario.CODIGO.ToString );
 
     Res.Send<TJSONObject>(vJsonObject).Status(200);
 
@@ -128,7 +128,7 @@ end;
 procedure Registry;
 begin
   THorse.Get('/usuario', Listar);
-  THorse.Get('/usuario/logar', Logar);
+  THorse.Post('/usuario/logar', Logar);
   THorse.Post('/usuario', Incluir);
 end;
 

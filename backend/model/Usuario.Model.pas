@@ -3,7 +3,7 @@ unit Usuario.Model;
 interface
 
 uses
-  FireDAC.Comp.Client, Config.Database;
+  FireDAC.Comp.Client, Config.Database, FireDAC.Stan.Param, Data.DB;
 
 type
   TUsuario = class
@@ -20,7 +20,7 @@ type
     property LOGIN: string read FLOGIN write FLOGIN;
     property SENHA: string read FSENHA write FSENHA;
 
-    function Autenticar(out erro: string): Boolean;
+    function Logar(out erro: string): Boolean;
     function Incluir(out erro: string): Boolean;
     function Listar(order_by: string; out erro: string): TFDQuery;
   end;
@@ -32,7 +32,7 @@ uses
 
 { TUsuario }
 
-function TUsuario.Autenticar(out erro: string): Boolean;
+function TUsuario.Logar(out erro: string): Boolean;
 var
   vQuery: TFDQuery;
 begin

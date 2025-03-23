@@ -8,6 +8,7 @@ uses
   System.SysUtils,
   Horse,
   Horse.Jhonson,
+  Horse.CORS,
   Usuario.Controller in 'controller\Usuario.Controller.pas',
   Usuario.Model in 'model\Usuario.Model.pas',
   Config.Database in 'Config.Database.pas',
@@ -16,6 +17,15 @@ uses
   Tarefa.Controller in 'controller\Tarefa.Controller.pas';
 
 begin
+
+  HorseCORS.
+    AllowedOrigin('*').
+    AllowedCredentials(true).
+    AllowedHeaders('*').
+    AllowedMethods('*').
+    ExposedHeaders('*');
+
+  THorse.Use(CORS);
   THorse.Use(Jhonson());
 
   Usuario.Controller.Registry;
