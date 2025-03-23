@@ -90,10 +90,11 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="Usuario.Controller.pas"/>
+        <DCCReference Include="controller\Usuario.Controller.pas"/>
         <DCCReference Include="model\Usuario.Model.pas"/>
         <DCCReference Include="Config.Database.pas"/>
         <DCCReference Include="model\Tarefa.Model.pas"/>
+        <DCCReference Include="controller\Tarefa.Controller.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
