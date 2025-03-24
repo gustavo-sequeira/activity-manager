@@ -1,0 +1,126 @@
+﻿unit Tarefa.Model;
+
+interface
+
+uses
+  FireDAC.Comp.Client;
+
+type
+  TTarefa = class
+  private
+    FCODIGO: Integer;
+    FCODIGO_USUARIO: Integer;
+    FDESCRICAO: string;
+  public
+    property CODIGO: Integer read FCODIGO write FCODIGO;
+    property CODIGO_USUARIO: Integer read FCODIGO_USUARIO write FCODIGO_USUARIO;
+    property DESCRICAO: string read FDESCRICAO write FDESCRICAO;
+
+    constructor Create;
+    destructor Destroy; override;
+
+    function Listar(order_by: string; out erro: string): TFDQuery;
+    function Incluir(out erro: string): Boolean;
+    function Excluir(out erro: string): Boolean;
+    function Editar(out erro: string): Boolean;
+  end;
+
+implementation
+
+uses
+  Config.Database, System.SysUtils;
+
+{ TTarefa }
+
+constructor TTarefa.Create;
+begin
+  config.database.Connect;
+end;
+
+destructor TTarefa.Destroy;
+begin
+  config.database.Disconect;
+end;
+
+function TTarefa.Editar(out erro: string): Boolean;
+var
+    qry : TFDQuery;
+begin
+    // Validacoes...
+    if ID_CLIENTE <= 0 then
+    begin
+        Result := false;
+        erro := 'Informe o id. cliente';
+        exit;
+    end;
+
+    try
+        qry := TFDQuery.Create(nil);
+        qry.Connection := Model.Connection.FConnection;
+
+        with qry do
+        begin
+            Active := false;
+            sql.Clear;
+            SQL.Add('UPDATE TAB_CLIENTE SET NOME=:NOME, EMAIL=:EMAIL, FONE=:FONE');
+            SQL.Add('WHERE ID_CLIENTE=:ID_CLIENTE');
+            ParamByName('NOME').Value := NOME;
+            ParamByName('EMAIL').Value := EMAIL;
+            ParamByName('FONE').Value := FONE;
+            ParamByName('ID_CLIENTE').Value := ID_CLIENTE;
+            ExecSQL;
+        end;
+
+        qry.Free;
+        erro := '';
+        result := true;
+
+    except on ex:exception do
+        begin
+            erro := 'Erro ao alterar cliente: ' + ex.Message;
+            Result := false;
+        end;
+    end;
+end;
+
+function TTarefa.Excluir(out erro: string): Boolean;
+var
+    vQuery : TFDQuery;
+begin
+    try
+        vQuery := TFDQuery.Create(nil);
+        vQuery.Connection :=Config.Database.FConnection;
+
+        with vQuery do
+        begin
+            Active := false;
+            sql.Clear;
+            SQL.Add('delete from tarefa where codigo = :codigo');
+            ParamByName('codigo').Value := CODIGO;
+            ExecSQL;
+        end;
+
+        vQuery.Free;
+        erro := '';
+        result := true;
+
+    except on e:exception do
+        begin
+            erro := 'Erro ao excluir a tarefa: ' + e.Message;
+            Result := false;
+        end;
+    end;
+end;
+
+function TTarefa.Incluir(out erro: string): Boolean;
+begin
+
+end;
+
+function TTarefa.Listar(order_by: string; out erro: string): TFDQuery;
+begin
+
+end;
+
+end.
+

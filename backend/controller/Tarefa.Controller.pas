@@ -171,6 +171,8 @@ begin
 
     vJsonObject := TJSONObject.Create;
     vJsonObject.AddPair('codigo', vTarefa.CODIGO.ToString);
+    vJsonObject.AddPair('codigo_usuario', vTarefa.CODIGO_USUARIO.ToString);
+    vJsonObject.AddPair('descricao', vTarefa.DESCRICAO);
 
     Res.Send<TJSONObject>(vJsonObject).Status(200);
   finally

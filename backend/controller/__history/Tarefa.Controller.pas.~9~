@@ -1,0 +1,179 @@
+unit Tarefa.Controller;
+
+interface
+
+uses
+  Horse, System.JSON, System.SysUtils, Tarefa.Model, FireDAC.Comp.Client,
+  Data.DB, DataSet.Serialize;
+
+procedure Registry;
+
+implementation
+
+procedure Listar(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  vTarefa: TTarefa;
+  vQuery: TFDQuery;
+  vErro: string;
+  vArrayTarefas: TJSONArray;
+begin
+  try
+    vTarefa := TTarefa.Create;
+  except
+    Res.Send('Erro ao conectar com o banco').Status(500);
+    exit;
+  end;
+
+  try
+    vQuery := vTarefa.Listar(vErro);
+
+    vArrayTarefas := vQuery.ToJSONArray();
+
+    Res.Send<TJSONArray>(vArrayTarefas);
+
+  finally
+    vQuery.Free;
+    vTarefa.Free;
+  end;
+end;
+
+procedure Incluir(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  vTarefa: TTarefa;
+  vJsonObject: TJSONObject;
+  vErro: string;
+  vBody: TJsonValue;
+begin
+
+  try
+    vTarefa := TTarefa.Create;
+  except
+    Res.Send('Erro ao conectar com o banco').Status(500);
+    exit;
+  end;
+
+  try
+    try
+      vBody := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Req.Body), 0) as TJsonValue;
+
+      vTarefa.CODIGO_USUARIO := vBody.GetValue<Integer>('codigo_usuario', 0);
+      vTarefa.DESCRICAO := vBody.GetValue<string>('descricao', '');
+      vTarefa.Incluir(vErro);
+
+      vBody.Free;
+
+      if vErro <> '' then
+        raise Exception.Create(vErro);
+
+    except
+      on ex: exception do
+      begin
+        Res.Send(ex.Message).Status(400);
+        exit;
+      end;
+    end;
+
+    vJsonObject := TJSONObject.Create;
+    vJsonObject.AddPair('codigo', vTarefa.CODIGO.ToString);
+
+    Res.Send<TJSONObject>(vJsonObject).Status(201);
+  finally
+    cli.Free;
+  end;
+end;
+
+procedure Excluir(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  cli: TCliente;
+  objCliente: TJSONObject;
+  erro: string;
+begin
+    // Conexao com o banco...
+  try
+    cli := TCliente.Create;
+  except
+    Res.Send('Erro ao conectar com o banco').Status(500);
+    exit;
+  end;
+
+  try
+    try
+      cli.ID_CLIENTE := Req.Params['id'].ToInteger;
+
+      if not cli.Excluir(erro) then
+        raise Exception.Create(erro);
+
+    except
+      on ex: exception do
+      begin
+        Res.Send(ex.Message).Status(400);
+        exit;
+      end;
+    end;
+
+    objCliente := TJSONObject.Create;
+    objCliente.AddPair('id_cliente', cli.ID_CLIENTE.ToString);
+
+    Res.Send<TJSONObject>(objCliente);
+  finally
+    cli.Free;
+  end;
+end;
+
+procedure Alterar(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  cli: TCliente;
+  objCliente: TJSONObject;
+  erro: string;
+  body: TJsonValue;
+begin
+    // Conexao com o banco...
+  try
+    cli := TCliente.Create;
+  except
+    Res.Send('Erro ao conectar com o banco').Status(500);
+    exit;
+  end;
+
+  try
+    try
+      body := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Req.Body), 0) as TJsonValue;
+
+      cli.ID_CLIENTE := body.GetValue<integer>('id_cliente', 0);
+      cli.NOME := body.GetValue<string>('nome', '');
+      cli.EMAIL := body.GetValue<string>('email', '');
+      cli.FONE := body.GetValue<string>('fone', '');
+      cli.Editar(erro);
+
+      body.Free;
+
+      if erro <> '' then
+        raise Exception.Create(erro);
+
+    except
+      on ex: exception do
+      begin
+        Res.Send(ex.Message).Status(400);
+        exit;
+      end;
+    end;
+
+    objCliente := TJSONObject.Create;
+    objCliente.AddPair('id_cliente', cli.ID_CLIENTE.ToString);
+
+    Res.Send<TJSONObject>(objCliente).Status(200);
+  finally
+    cli.Free;
+  end;
+end;
+
+procedure Registry;
+begin
+  THorse.Get('/tarefa/usuario/:id', Listar);
+  THorse.Post('/tarefa', Incluir);
+  THorse.Put('/tarefa', Alterar);
+  THorse.Delete('/tarefa/:id', Excluir);
+end;
+
+end.
+

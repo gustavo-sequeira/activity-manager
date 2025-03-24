@@ -1,0 +1,7 @@
+unit Config.Database;
+
+interface
+
+implementation
+
+end.

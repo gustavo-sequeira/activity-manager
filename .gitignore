@@ -1,7 +1,0 @@
-backend/__history/
-backend/model/__history/
-backend/Server.dproj.local
-delivery.identcache
-*.dcu
-*.~*
-*.res

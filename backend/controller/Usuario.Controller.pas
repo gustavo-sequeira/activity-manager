@@ -46,6 +46,7 @@ begin
 
     vJsonObject := TJSONObject.Create;
     vJsonObject.AddPair('codigo',vUsuario.CODIGO.ToString );
+    vJsonObject.AddPair('login',vUsuario.LOGIN );
 
     Res.Send<TJSONObject>(vJsonObject).Status(200);
 

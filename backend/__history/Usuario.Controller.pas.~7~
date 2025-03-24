@@ -1,0 +1,41 @@
+unit Usuario.Controller;
+
+interface
+
+uses
+  Horse, System.JSON, System.SysUtils;
+
+procedure AutenticarUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+
+procedure IncluirUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+
+procedure Registry;
+
+implementation
+
+procedure AutenticarUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+begin
+  Writeln(Format('Servidor está rodando em %s:%d', ['localhost', THorse.Port]));
+  Readln;
+
+  Res.Send('Listar Usuario');
+end;
+
+procedure IncluirUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+begin
+  Writeln(Format('Servidor está rodando em %s:%d', ['localhost', THorse.Port]));
+  Readln;
+
+  Res.Send('Listar Usuario');
+end;
+
+procedure Registry;
+begin
+  THorse.Get('/usuario', AutenticarUsuario);
+
+  THorse.Post('/usuario',IncluirUsuario);
+
+end;
+
+end.
+

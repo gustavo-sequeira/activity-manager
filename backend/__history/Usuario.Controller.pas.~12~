@@ -1,0 +1,42 @@
+unit Usuario.Controller;
+
+interface
+
+uses
+  Horse, System.JSON, System.SysUtils, Usuario.Model, FireDAC.Comp.Client, DataSet.Serialize;
+
+procedure AutenticarUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+
+procedure IncluirUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+
+procedure Registry;
+
+implementation
+
+procedure AutenticarUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  user: TUsuario;
+  qry: TFDQuery;
+  erro: String;
+  arrayUsuario: TJSONArray;
+begin
+  user := TUsuario.Create;
+  qry := user.Listar('',erro);
+
+  arrayUsuario := qry.ToJSONArray();
+  Res.Send<TJSONArray>(arrayUsuario);
+end;
+
+procedure IncluirUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+begin
+  Res.Send('Listar Usuario');
+end;
+
+procedure Registry;
+begin
+  THorse.Get('/usuario', AutenticarUsuario);
+  THorse.Post('/usuario', IncluirUsuario);
+end;
+
+end.
+
