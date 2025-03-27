@@ -81,7 +81,8 @@ const Register = (props) => {
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.register(nome, login, senha).then(
         (response) => {
-          setMessage(response.data.message);
+         // setMessage(response.data.message);
+          setMessage('Usuário cadastrado com sucesso');
           setSuccessful(true);
         },
         (error) => {

@@ -9,8 +9,8 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import Tarefa from "./components/Tarefa";
+import FormTarefa from "./components/FormTarefa";
 
-// import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 
 const App = () => {
@@ -76,11 +76,11 @@ const App = () => {
 
       <div className="container mt-3">
         <Routes>
-        <Route exact path={"/"} element={<Home />} />
+        <Route exact path="/" element={<Home />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/tarefa" element={<Tarefa />} />
-
+          <Route exact path="/create" element={<FormTarefa />} />
         </Routes>
       </div>
 

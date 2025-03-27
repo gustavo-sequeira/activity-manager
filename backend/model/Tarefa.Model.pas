@@ -94,8 +94,8 @@ begin
     begin
       Active := false;
       sql.Clear;
-      SQL.Add('delete from tarefa where codigo = :codigo');
-      ParamByName('codigo').Value := CODIGO;
+      SQL.Add('delete from tarefa where codigo = :id');
+      ParamByName('id').Value := CODIGO;
       ExecSQL;
     end;
 

@@ -23,9 +23,7 @@ const Home = () => {
 
   return (
     <div className="container">
-      <header className="jumbotron">
-        <h3>Código: {content.codigo}</h3>
-      </header>
+
     </div>
   );
 };

@@ -19,7 +19,6 @@ var
 begin
   try
     vTarefa := TTarefa.Create;
-    vTarefa.CODIGO_USUARIO := Req.Params['id'].ToInteger;
   except
     Res.Send('Erro ao conectar com o banco').Status(500);
     exit;
@@ -27,6 +26,7 @@ begin
 
   try
     try
+      vTarefa.CODIGO_USUARIO := Req.Params['id'].ToInteger;
       vQuery := vTarefa.Listar(vErro);
 
       if vQuery.IsEmpty then
@@ -104,12 +104,12 @@ begin
 
   try
     vTarefa := TTarefa.Create;
-    vTarefa.CODIGO := Req.Params['id'].ToInteger;
   except
     Res.Send('Erro ao conectar com o banco').Status(500);
     exit;
   end;
 
+    vTarefa.CODIGO := Req.Params['id'].ToInteger;
   try
     try
       if not vTarefa.Excluir(vErro) then

@@ -1,16 +1,17 @@
 import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
 import AuthService from "../services/auth.service";
+import Tarefa from "./Tarefa";
 
 const required = (value) => {
   if (!value) {
     return (
       <div className="invalid-feedback d-block">
-        This field is required!
+        Este campo é obrigatório
       </div>
     );
   }
@@ -48,7 +49,8 @@ const Login = () => {
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.login(login, senha).then(
         () => {
-          navigate("/tarefa");
+          <Link to="/tarefa"></Link>
+          navigate("/tarefa/*");
           window.location.reload();
         },
         (error) => {
@@ -114,7 +116,7 @@ const Login = () => {
           {message && (
             <div className="form-group">
               <div className="alert alert-danger" role="alert">
-                {message}
+               Login inválido
               </div>
             </div>
           )}
