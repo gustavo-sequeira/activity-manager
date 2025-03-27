@@ -30,7 +30,7 @@ begin
       vQuery := vTarefa.Listar(vErro);
 
       if vQuery.IsEmpty then
-        Res.Send('Não existe tarefas para esse usuário')
+        Res.Send(' ')
       else
       begin
         vArrayTarefas := vQuery.ToJSONArray();

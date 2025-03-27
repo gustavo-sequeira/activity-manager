@@ -14,7 +14,7 @@ const Tarefa = () => {
 
     axios.get(API_URL + "/usuario/" + JSON.parse(localStorage.getItem("codigo")))
       .then((response) => {
-        if (Object.keys(response.data).length === 0) {
+        if (Object.values(response.data).length > 1) {
           setTarefas(response.data)
         };
       },
