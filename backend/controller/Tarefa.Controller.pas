@@ -69,7 +69,7 @@ begin
     try
       vBody := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Req.Body), 0) as TJsonValue;
 
-      vTarefa.CODIGO_USUARIO := vBody.GetValue<Integer>('codigo_usuario', 0);
+      vTarefa.CODIGO_USUARIO := vBody.GetValue<Integer>('codigoUsuario', 0);
       vTarefa.DESCRICAO := vBody.GetValue<string>('descricao', '');
       vTarefa.Incluir(vErro);
 

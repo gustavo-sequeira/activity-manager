@@ -120,7 +120,7 @@ begin
   if Trim(DESCRICAO) = '' then
   begin
     Result := false;
-    erro := 'Informe alguma descriÃ§Ã£o para a tarefa';
+    erro := 'Informe alguma descrição para a tarefa';
     exit;
   end;
 

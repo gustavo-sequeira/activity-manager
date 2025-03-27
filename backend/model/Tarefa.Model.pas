@@ -168,7 +168,7 @@ var
   vQuery: TFDQuery;
 begin
 
-  if CODIGO_USUARIO <= 0 then
+  if CODIGO_USUARIO <= -1 then
   begin
     erro := 'Informe algum usuario para a tarefa';
     exit;

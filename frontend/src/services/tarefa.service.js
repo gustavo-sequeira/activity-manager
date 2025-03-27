@@ -2,13 +2,9 @@ import axios from "axios";
 
 const API_URL = "http://localhost:9000/tarefa";
 
-const insert = (codigo_usuario, descricao) => {
-  return axios.post(API_URL , {
-    codigo_usuario,
-    descricao
-  });
+const insert = (codigousuario, descricao) => {
+  return axios.post(API_URL , {codigousuario, descricao, });
 };
-
 
 const TarefaService = {
     insert

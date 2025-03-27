@@ -19,7 +19,6 @@ var
 begin
   try
     vTarefa := TTarefa.Create;
-    vTarefa.CODIGO_USUARIO := Req.Params['id'].ToInteger;
   except
     Res.Send('Erro ao conectar com o banco').Status(500);
     exit;
@@ -27,10 +26,11 @@ begin
 
   try
     try
+      vTarefa.CODIGO_USUARIO := Req.Params['id'].ToInteger;
       vQuery := vTarefa.Listar(vErro);
 
       if vQuery.IsEmpty then
-        Res.Send('Não existe tarefas para esse usuário')
+        Res.Send(' ')
       else
       begin
         vArrayTarefas := vQuery.ToJSONArray();
@@ -104,12 +104,12 @@ begin
 
   try
     vTarefa := TTarefa.Create;
-    vTarefa.CODIGO_USUARIO := Req.Params['id'].ToInteger;
   except
     Res.Send('Erro ao conectar com o banco').Status(500);
     exit;
   end;
 
+    vTarefa.CODIGO := Req.Params['id'].ToInteger;
   try
     try
       if not vTarefa.Excluir(vErro) then
@@ -142,7 +142,7 @@ begin
 
   try
     vTarefa := TTarefa.Create;
-    vTarefa.CODIGO_USUARIO := Req.Params['id'].ToInteger;
+    vTarefa.CODIGO := Req.Params['id'].ToInteger;
   except
     Res.Send('Erro ao conectar com o banco').Status(500);
     exit;
@@ -152,7 +152,7 @@ begin
     try
       vBody := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Req.Body), 0) as TJsonValue;
 
-      vTarefa.CODIGO := vBody.GetValue<integer>('codigo', 0);
+
       vTarefa.DESCRICAO := vBody.GetValue<string>('descricao', '');
       vTarefa.Alterar(vErro);
 
@@ -171,6 +171,8 @@ begin
 
     vJsonObject := TJSONObject.Create;
     vJsonObject.AddPair('codigo', vTarefa.CODIGO.ToString);
+    vJsonObject.AddPair('codigo_usuario', vTarefa.CODIGO_USUARIO.ToString);
+    vJsonObject.AddPair('descricao', vTarefa.DESCRICAO);
 
     Res.Send<TJSONObject>(vJsonObject).Status(200);
   finally

@@ -4,7 +4,6 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 
 import CheckButton from "react-validation/build/button";
-import AuthService from "../services/auth.service";
 import TarefaService from "../services/tarefa.service";
 
 
@@ -28,11 +27,11 @@ const vdescricao = (value) => {
   }
 };
 
-const FormTarefa = () => {
+const FormTarefa = ({codigoUsuario}) => {
   const form = useRef();
   const checkBtn = useRef();
 
-  const [codigUsuario, setCodigoUsuario] = useState("");
+  const [codigousuario, setCodigousuario] = useState("");
   const [descricao, setDescricao] = useState("");
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
@@ -50,10 +49,10 @@ const FormTarefa = () => {
   
       form.current.validateAll();
 
-      setCodigoUsuario(AuthService.getCurrentCodigo());
-  
+      setCodigousuario(JSON.parse(localStorage.getItem("codigo")));
+
       if (checkBtn.current.context._errors.length === 0) {
-        TarefaService.insert(codigUsuario, descricao).then(
+        TarefaService.insert(codigousuario, descricao).then(
           (response) => {
            // setMessage(response.data.message);
             setMessage('Tarefa salva com sucesso');
@@ -88,7 +87,7 @@ const FormTarefa = () => {
             type="text"
             className="form-control"
             name="codigo"
-            value={codigUsuario}
+            value={codigoUsuario} // mudar isso aqui
             disabled 
           />
         </div>
