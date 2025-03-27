@@ -10,7 +10,8 @@ const Tarefa = () => {
 
 
   useEffect(() => {
-    axios.get(API_URL + "/usuario/1").then((response) => {
+    console.log(JSON.parse(localStorage.getItem("codigo")))
+    axios.get(API_URL + "/usuario/"+ JSON.parse(localStorage.getItem("codigo")) ).then((response) => {
       setTarefas(response.data);
     });
   }, []);
