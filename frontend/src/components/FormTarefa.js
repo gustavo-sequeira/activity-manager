@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 
 import CheckButton from "react-validation/build/button";
+import AuthService from "../services/auth.service";
+import TarefaService from "../services/tarefa.service";
 
-const API_URL = "http://localhost:9000/tarefa";
 
 const required = (value) => {
   if (!value) {
@@ -18,7 +18,7 @@ const required = (value) => {
   }
 };
 
-const vnome = (value) => {
+const vdescricao = (value) => {
   if (value.length < 3 || value.length > 20) {
     return (
       <div className="invalid-feedback d-block">
@@ -28,121 +28,80 @@ const vnome = (value) => {
   }
 };
 
-const vlogin = (value) => {
-  if (value.length < 3 || value.length > 20) {
-    return (
-      <div className="invalid-feedback d-block">
-        O login deve 3 a 20 caracteres.
-      </div>
-    );
-  }
-};
-
-const vsenha = (value) => {
-  if (value.length < 6 || value.length > 40) {
-    return (
-      <div className="invalid-feedback d-block">
-        A senha deve 6 a 40 caracteres.
-      </div>
-    );
-  }
-};
-
 const FormTarefa = () => {
   const form = useRef();
   const checkBtn = useRef();
 
-  const [nome, setNome] = useState("");
-  const [login, setLogin] = useState("");
-  const [senha, setSenha] = useState("");
+  const [codigUsuario, setCodigoUsuario] = useState("");
+  const [descricao, setDescricao] = useState("");
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
 
-  const onChangeNome = (e) => {
-    const login = e.target.value;
-    setNome(login);
+  const onChangDescricao = (e) => {
+    const descricao = e.target.value;
+    setDescricao(descricao);
   }; 
 
-  const onChangeLogin = (e) => {
-    const login = e.target.value;
-    setLogin(login);
-  };
+    const handleSalvar = (e) => {
+      e.preventDefault();
+  
+      setMessage("");
+      setSuccessful(false);
+  
+      form.current.validateAll();
 
-  const onChangeSenha = (e) => {
-    const senha = e.target.value;
-    setSenha(senha);
-  };
-
-  const handleRegister = (e) => {
-    e.preventDefault();
-/*
-    setMessage("");
-    setSuccessful(false);
-
-    form.current.validateAll();
-
-    if (checkBtn.current.context._errors.length === 0) {
-      AuthService.register(nome, login, senha).then(
-        (response) => {
-         // setMessage(response.data.message);
-          setMessage('Usuário cadastrado com sucesso');
-          setSuccessful(true);
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          setMessage(resMessage);
-          setSuccessful(false);
-        }
-      );
-    }*/
-  }; 
+      setCodigoUsuario(AuthService.getCurrentCodigo());
+  
+      if (checkBtn.current.context._errors.length === 0) {
+        TarefaService.insert(codigUsuario, descricao).then(
+          (response) => {
+           // setMessage(response.data.message);
+            setMessage('Tarefa salva com sucesso');
+            setSuccessful(true);
+          },
+          (error) => {
+            const resMessage =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+  
+            setMessage(resMessage);
+            setSuccessful(false);
+          }
+        );
+      }
+    };   
+ 
   return (
     <>
     <div>
-      <h2>Criar Nova Tarefa</h2>
+      <h2>Formulário de tarefas</h2>
     </div>
-    <Form onSubmit={handleRegister} ref={form}>
+    <Form onSubmit={handleSalvar} ref={form}>
     {!successful && (
       <div>
         <div className="form-group">
-          <label htmlFor="nome">Nome</label>
+          <label htmlFor="codigo">Codigo</label>
           <Input
             type="text"
             className="form-control"
-            name="nome"
-            value={nome}
-            onChange={onChangeNome}
-            validations={[required, vnome]}
+            name="codigo"
+            value={codigUsuario}
+            disabled 
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="login">Login</label>
+          <label htmlFor="descricao">Descrição</label>
           <Input
             type="text"
             className="form-control"
-            name="login"
-            value={login}
-            onChange={onChangeLogin}
-            validations={[required, vlogin]}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="senha">Senha</label>
-          <Input
-            type="password"
-            className="form-control"
-            name="senha"
-            value={senha}
-            onChange={onChangeSenha}
-            validations={[required, vsenha]}
+            name="descricao"
+            value={descricao}
+            onChange={onChangDescricao}
+            validations={[required, vdescricao]}
           />
         </div>
 

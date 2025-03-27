@@ -18,7 +18,8 @@ const login = (login, senha) => {
     })
     .then((response) => {
       if (response.data.login) {
-        localStorage.setItem("login", JSON.stringify(response.data));
+        localStorage.setItem("login", JSON.stringify(response.data.login));
+        localStorage.setItem("codigo", JSON.stringify(response.data.codigo));
       }
 
       return response.data;
@@ -27,18 +28,24 @@ const login = (login, senha) => {
 
 const logout = () => {
   localStorage.removeItem("login");
+  localStorage.removeItem("codigo");
   return;
 };
 
-const getCurrentUser = () => {
+const getCurrentLogin = () => {
   return JSON.parse(localStorage.getItem("login"));
+};
+
+const getCurrentCodigo = () => {
+  return JSON.parse(localStorage.getItem("codigo"));
 };
 
 const AuthService = {
   register,
   login,
   logout,
-  getCurrentUser,
+  getCurrentLogin,
+  getCurrentCodigo,
 }
 
 export default AuthService;

@@ -14,13 +14,13 @@ import FormTarefa from "./components/FormTarefa";
 import EventBus from "./common/EventBus";
 
 const App = () => {
-  const [currentUser, setCurrentUser] = useState(undefined);
+  const [currentLogin, setCurrentLogin] = useState(undefined);
 
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
+    const login = AuthService.getCurrentLogin();
 
-    if (user) {
-      setCurrentUser(user);
+    if (login) {
+      setCurrentLogin(login);
     }
 
     EventBus.on("logout", () => {
@@ -34,7 +34,7 @@ const App = () => {
 
   const logOut = () => {
     AuthService.logout();
-    setCurrentUser(undefined);
+    setCurrentLogin(undefined);
   };
 
   return (
@@ -44,7 +44,7 @@ const App = () => {
           Pharmapele
         </Link>
 
-        {currentUser ? (
+        {currentLogin ? (
           <div className="navbar-nav ml-auto">
             <li className="nav-item">
               <Link to={"/tarefa"} className="nav-link">

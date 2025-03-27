@@ -5,7 +5,6 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
 import AuthService from "../services/auth.service";
-import Tarefa from "./Tarefa";
 
 const required = (value) => {
   if (!value) {
@@ -50,7 +49,7 @@ const Login = () => {
       AuthService.login(login, senha).then(
         () => {
           <Link to="/tarefa"></Link>
-          navigate("/tarefa/*");
+          navigate("/tarefa");
           window.location.reload();
         },
         (error) => {
