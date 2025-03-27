@@ -7,13 +7,28 @@ const API_URL = "http://localhost:9000/tarefa";
 
 const Tarefa = () => {
   const [tarefas, setTarefas] = useState([]);
-
+  const [successful, setSuccessful] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    console.log(JSON.parse(localStorage.getItem("codigo")))
-    axios.get(API_URL + "/usuario/"+ JSON.parse(localStorage.getItem("codigo")) ).then((response) => {
-      setTarefas(response.data);
-    });
+
+    axios.get(API_URL + "/usuario/" + JSON.parse(localStorage.getItem("codigo")))
+      .then((response) => {
+        if (Object.keys(response.data).length === 0) {
+          setTarefas(response.data)
+        };
+      },
+        (error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+          setMessage(resMessage);
+          setSuccessful(false);
+        });
   }, []);
 
   const excluirTarefa = (id) => {
@@ -28,23 +43,53 @@ const Tarefa = () => {
   };
 
   return (<>
-    <h2>Lista de Tarefas</h2>
-    <Link to="/create">Criar Nova Tarefa</Link>
-    <ul>
-      {tarefas.map(tarefa => (
-        <li key={tarefa.codigo} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {tarefa.descricao + " " + tarefa.codigo} -  {tarefa.codigo ? "✅" : "❌"}
-          <Link to={API_URL + "/" + tarefa.codigo}>Editar</Link>
-          <button onClick={() => excluirTarefa(tarefa.codigo)}>Excluir</button>
-        </li>
-      ))}
-    </ul>
 
-    <div className="container mt-3">
-      <Routes>
-        <Route exact path="/create" element={<FormTarefa />} />
-      </Routes>
-    </div>
+
+
+    {JSON.parse(localStorage.getItem("codigo")) ? (
+      <>
+        <h2>Lista de Tarefas</h2>
+        <Link to="/create">Criar Nova Tarefa</Link>
+        <ul>
+          {tarefas.map(tarefa => (
+            <li key={tarefa.codigo} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {tarefa.descricao + " " + tarefa.codigo} -  {tarefa.codigo ? "✅" : "❌"}
+              <Link to={API_URL + "/" + tarefa.codigo}>Editar</Link>
+              <button onClick={() => excluirTarefa(tarefa.codigo)}>Excluir</button>
+            </li>
+          ))}
+        </ul>
+
+        <div className="container mt-3">
+          <Routes>
+            <Route exact path="/create" element={<FormTarefa />} />
+          </Routes>
+        </div>
+
+
+
+
+      </>
+
+    ) : (
+      <Link to="/home"></Link>
+    )}
+
+
+    {message && (
+      <div className="form-group">
+        <div
+          className={
+            successful ? "alert alert-success" : "alert alert-danger"
+          }
+          role="alert"
+        >
+          {message}
+        </div>
+      </div>
+    )}
+
+
   </>);
 }
 
