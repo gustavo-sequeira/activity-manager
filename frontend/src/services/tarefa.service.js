@@ -6,8 +6,13 @@ const insert = (codigousuario, descricao) => {
   return axios.post(API_URL , {codigousuario, descricao, });
 };
 
+const edit = (codigo, codigousuario, descricao) => {
+  return axios.put(API_URL+"/"+codigo , {codigo, codigousuario, descricao, });
+};
+
 const TarefaService = {
-    insert
+    insert,
+    edit
 }
 
 export default TarefaService;

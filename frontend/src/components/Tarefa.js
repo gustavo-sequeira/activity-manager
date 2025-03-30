@@ -12,7 +12,8 @@ const Tarefa = () => {
 
   useEffect(() => {
 
-    axios.get(API_URL + "/usuario/" + JSON.parse(localStorage.getItem("codigo")))
+   // axios.get(API_URL + "/usuario/" + JSON.parse(localStorage.getItem("codigo")))
+   axios.get(API_URL + "/usuario/" + JSON.parse(localStorage.getItem("codigo"))) 
       .then((response) => {
         if (Object.values(response.data).length > 1) {
           setTarefas(response.data)
@@ -43,9 +44,6 @@ const Tarefa = () => {
   };
 
   return (<>
-
-
-
     {JSON.parse(localStorage.getItem("codigo")) ? (
       <>
         <h2>Lista de Tarefas</h2>
@@ -54,7 +52,7 @@ const Tarefa = () => {
           {tarefas.map(tarefa => (
             <li key={tarefa.codigo} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               {tarefa.descricao + " " + tarefa.codigo} -  {tarefa.codigo ? "✅" : "❌"}
-              <Link to={API_URL + "/" + tarefa.codigo}>Editar</Link>
+              <Link to={"/edit/" + tarefa.codigo}>Editar</Link>
               <button onClick={() => excluirTarefa(tarefa.codigo)}>Excluir</button>
             </li>
           ))}
@@ -62,20 +60,14 @@ const Tarefa = () => {
 
         <div className="container mt-3">
           <Routes>
-            <Route exact path="/create" element={<FormTarefa />} />
+          <Route exact path="/create" element={<FormTarefa />} />
+          <Route exact path="/edit" element={<FormTarefa />} />
           </Routes>
         </div>
-
-
-
-
       </>
-
     ) : (
       <Link to="/home"></Link>
     )}
-
-
     {message && (
       <div className="form-group">
         <div
@@ -88,8 +80,6 @@ const Tarefa = () => {
         </div>
       </div>
     )}
-
-
   </>);
 }
 

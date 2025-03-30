@@ -81,6 +81,7 @@ const App = () => {
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/tarefa" element={<Tarefa />} />
           <Route exact path="/create" element={<FormTarefa />} />
+          <Route exact path="/edit/:codigoTarefa" element={<FormTarefa />} />
         </Routes>
       </div>
 
