@@ -11,8 +11,6 @@ import Home from "./components/Home";
 import Tarefa from "./components/Tarefa";
 import FormTarefa from "./components/FormTarefa";
 
-import EventBus from "./common/EventBus";
-
 const App = () => {
   const [currentLogin, setCurrentLogin] = useState(undefined);
 
@@ -22,14 +20,6 @@ const App = () => {
     if (login) {
       setCurrentLogin(login);
     }
-
-    EventBus.on("logout", () => {
-      logOut();
-    });
-
-    return () => {
-      EventBus.remove("logout");
-    };
   }, []);
 
   const logOut = () => {
